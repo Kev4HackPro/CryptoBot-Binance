@@ -1,9 +1,8 @@
 import requests
-from binance.client import Client
+from binance.client import  Client
 from time import sleep, strftime
 import json
-
-client = Client(api_key='', api_secret='')
+client = Client('FOQB4cg4vMBqFR8qY9fgvf2b8lqxdeBSYYeudYGvThGve6br3VlxrIwcGcfcADfx', 'PakNsgyipkoApcBNZce9i3hcYJvpCkhQ3CwpHgIiZbl1r8nwr6bLW7r4cNXBevF5')
 is_next_operation_buy = True
 
 DIP_THRESHOLD = 2.50
