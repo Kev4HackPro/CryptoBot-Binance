@@ -1,7 +1,10 @@
 import requests
+from binance.client import Client
 from time import sleep, strftime
 import json
-isNextOperationBuy = True
+
+client = Client(api_key='', api_secret='')
+is_next_operation_buy = True
 
 DIP_THRESHOLD = 2.50
 UPWARD_TREND_THRESHOLD = 2.50
@@ -11,7 +14,7 @@ STOP_LOSS_THRESHOLD = -0.7
 
 def get_balances():
     account_balance = requests.get('')
-    return account_balance
+    return float(account_balance.text)
 
 
 def get_market_price():
@@ -20,13 +23,15 @@ def get_market_price():
 
 
 def place_sell_order():
-    amount_to_sell = 0.5 * get_balances()
+    balance = get_balances()
+    amount_to_sell = 0.5 * balance
     price_at_operation_execution = requests.post('', amount_to_sell)
     return price_at_operation_execution
 
 
 def place_buy_order():
-    amount_to_buy = 0.73 * get_balances()
+    balance = get_balances()
+    amount_to_buy = 0.73 * balance
     price_at_operation_execution = requests.post('', amount_to_buy)
     return price_at_operation_execution
 
@@ -43,14 +48,14 @@ def start_bot():
         sleep(47)
 
 
-lastOpPrice = 500.0
+last_op_price = 500.0
 
 
 def attempt_to_make_trade():
     current_price = get_market_price()
     # noinspection PyTypeChecker
-    percentage_diff = (current_price - lastOpPrice) / lastOpPrice * 100
-    if isNextOperationBuy:
+    percentage_diff = (current_price - last_op_price) / last_op_price * 100
+    if is_next_operation_buy:
         try_to_buy(percentage_diff)
     else:
         try_to_sell(percentage_diff)
@@ -58,18 +63,16 @@ def attempt_to_make_trade():
 
 def try_to_buy(percentage_diff):
     if percentage_diff >= UPWARD_TREND_THRESHOLD or percentage_diff <= DIP_THRESHOLD:
-        lastOpPrice = place_buy_order()
-        isNextOperationBuy = False
+        last_op_price = place_buy_order()
+        is_next_operation_buy = False
 
 
 def try_to_sell(percentage_diff):
     if percentage_diff >= PROFIT_THRESHOLD or percentage_diff <= STOP_LOSS_THRESHOLD:
-        lastOpPrice = place_sell_order()
-        isNextOperationBuy = True
+        last_op_price = place_sell_order()
+        is_next_operation_buy = True
 
 
 # Log of the bot
 def create_log(msg):
     print(msg)
-
-
