@@ -1,7 +1,10 @@
 import requests
-from binance.client import  Client
+import os
+from binance.client import Client
 from time import sleep, strftime
 import json
+api_key = os.environ.get('binance_api')
+api_secret = os.environ.get('binance_secret')
 client = Client('api_key', 'api_secret')
 is_next_operation_buy = True
 
