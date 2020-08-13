@@ -1,11 +1,12 @@
 import requests
 import os
 from binance.client import Client
-from time import sleep, strftime
+from time import sleep
 import json
 api_key = os.environ.get('binance_api')
 api_secret = os.environ.get('binance_secret')
 client = Client('api_key', 'api_secret')
+
 is_next_operation_buy = True
 
 DIP_THRESHOLD = 2.50
@@ -13,26 +14,26 @@ UPWARD_TREND_THRESHOLD = 2.50
 PROFIT_THRESHOLD = 2.20
 STOP_LOSS_THRESHOLD = -0.7
 
+btc_balance = client.get_asset_balance(asset='BTC')
+
 
 def get_balances():
     account_balance = requests.get('')
     return float(account_balance.text)
 
-
+market_price = client.
 def get_market_price():
     mkt_price = requests.get('')
     return mkt_price
 
 
 def place_sell_order():
-    balance = get_balances()
-    amount_to_sell = 0.5 * balance
+    amount_to_sell = 0.5 * btc_balance
     price_at_operation_execution = requests.post('', amount_to_sell)
     return price_at_operation_execution
 
 
 def place_buy_order():
-    balance = get_balances()
     amount_to_buy = 0.73 * balance
     price_at_operation_execution = requests.post('', amount_to_buy)
     return price_at_operation_execution
