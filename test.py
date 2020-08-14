@@ -11,32 +11,23 @@ is_next_operation_buy = True
 
 DIP_THRESHOLD = 2.50
 UPWARD_TREND_THRESHOLD = 2.50
-PROFIT_THRESHOLD = 2.20
-STOP_LOSS_THRESHOLD = -0.7
+PROFIT_THRESHOLD = 1.25/100
+STOP_LOSS_THRESHOLD = -2.00
 
 btc_balance = client.get_asset_balance(asset='BTC')
-
-
-def get_balances():
-    account_balance = requests.get('')
-    return float(account_balance.text)
-
-market_price = client.
-def get_market_price():
-    mkt_price = requests.get('')
-    return mkt_price
+mkt_price = client.get_symbol_ticker(symbol='BTCUSDT')
 
 
 def place_sell_order():
     amount_to_sell = 0.5 * btc_balance
-    price_at_operation_execution = requests.post('', amount_to_sell)
-    return price_at_operation_execution
+    sell_order = client.create_test_order(symbol='BTCUSDT', side='SELL', type='MARKET', quantity=amount_to_sell)
+    return sell_order
 
 
 def place_buy_order():
-    amount_to_buy = 0.73 * balance
-    price_at_operation_execution = requests.post('', amount_to_buy)
-    return price_at_operation_execution
+    amount_to_buy = 0.73 * btc_balance
+    buy_order = client.create_test_order(symbol='BTCUSDT', side='BUY', type='MARKET', quantity=amount_to_buy)
+    return buy_order
 
 
 # optional but useful to confirm operations made
@@ -46,7 +37,7 @@ def get_operation_details(operation_id):
 
 
 def start_bot():
-    while True:
+    while 1:
         attempt_to_make_trade()
         sleep(47)
 
@@ -55,7 +46,7 @@ last_op_price = 500.0
 
 
 def attempt_to_make_trade():
-    current_price = get_market_price()
+    current_price = mkt_price
     # noinspection PyTypeChecker
     percentage_diff = (current_price - last_op_price) / last_op_price * 100
     if is_next_operation_buy:
