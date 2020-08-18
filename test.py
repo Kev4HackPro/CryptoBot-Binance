@@ -11,7 +11,7 @@ is_next_operation_buy = True
 
 DIP_THRESHOLD = 2.50
 UPWARD_TREND_THRESHOLD = 2.50
-PROFIT_THRESHOLD = 1.25/100
+PROFIT_THRESHOLD = 1.25
 STOP_LOSS_THRESHOLD = -2.00
 
 btc_balance = client.get_asset_balance(asset='BTC')
